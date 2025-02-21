@@ -7,17 +7,23 @@ public class MonsterAi : MonoBehaviour
 {
     public Transform player; // 플레이어 위치
     private NavMeshAgent agent;
+    bool isDie;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        StartCoroutine(PlayerFind());
     }
 
-    void Update()
+    IEnumerator PlayerFind()
     {
-        if (player != null)
+        while (isDie == false)
         {
-            agent.SetDestination(player.position);
+            if (player != null)
+            {
+                agent.SetDestination(player.position);
+            }
+            yield return new WaitForSeconds(1f);
         }
     }
 }

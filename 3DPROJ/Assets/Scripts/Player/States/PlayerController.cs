@@ -7,6 +7,7 @@ using UnityEngine.Playables;
 
 public class PlayerController : MonoBehaviour
 {
+    public ArrowObjPool arrowPool;
     //public GameObject aimInfo;
     public LinkedList<GameObject> attackRangeMonsterList = new LinkedList<GameObject>();
     public Coroutine attackCoroution;
@@ -151,17 +152,13 @@ public class PlayerController : MonoBehaviour
         Vector3 arrowDir = (attackRange.proximateMonster.gameObject.transform.position - transform.position).normalized;
         for (int i = 0; i < 3; i++)
         {
-
-            var temp = Instantiate(arrowPrefab,
-            new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z),
-            Quaternion.LookRotation(arrowDir));
-
-            //temp.transform.localRotation = Quaternion.Euler(arrowDir.x+90, arrowDir.y, arrowDir.z);
-            //temp.transform.rotation = Quaternion.Euler(arrowDir.x+90, arrowDir.y, arrowDir.z);
-            //temp.transform.rotation = Quaternion.LookRotation(new Vector3(arrowDir.x+90, arrowDir.y, arrowDir.z));
+            var temp = arrowPool.OnActive();
+            temp.transform.position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
+            temp.transform.rotation = Quaternion.LookRotation(arrowDir);   
+            //Instantiate(arrowPrefab,
+            //new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z),
+            //Quaternion.LookRotation(arrowDir));
             temp.GetComponent<Rigidbody>().AddForce(arrowDir*10, ForceMode.Impulse);
-            Debug.Log("목적지" + temp.transform.position);
-            Debug.Log("출발지" + transform.position);
             Debug.Log(arrowDir);
             yield return new WaitForSeconds(0.2f);
         }
