@@ -1,12 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 
 public class PlayerController : MonoBehaviour
 {
+    public float maxHp { get; private set; }
+    public float currentHp { get; private set; }
+    public Action hpEvent;
     public ArrowObjPool arrowPool;
     //public GameObject aimInfo;
     public LinkedList<GameObject> attackRangeMonsterList = new LinkedList<GameObject>();
@@ -24,8 +28,10 @@ public class PlayerController : MonoBehaviour
 
     public float speedParameter;
     public bool isMouseLeftPress;
+    public bool isAttacking;
 
-    public LayerMask groundLayer;
+    public LayerMask groundLayer; 
+    Vector3 arrowDir;
     public Vector3 camForward;
     public Vector3 camRight;
     public Vector3 moveDirection;
@@ -39,6 +45,8 @@ public class PlayerController : MonoBehaviour
     public PlayerIdle playerIdle { get; private set; }
     public PlayerMove playerMove { get; private set; }
     public PlayerJump playerJump { get; private set; }
+    public PlayerAttackMove playerAttackMove { get; private set; }
+    public AttackIdle playerAttackIdle { get; private set; }
 
     public void ChangeState(PlayerState playerState)
     {
@@ -47,19 +55,22 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
+        maxHp = 100;
+        currentHp = maxHp;
+        isAttacking = false;
         playerIdle = new PlayerIdle();
+        playerAttackMove = new PlayerAttackMove();
+        playerAttackIdle = new AttackIdle();
         playerMove = new PlayerMove();
         playerJump = new PlayerJump();
-
-    }
-
-    void Start()
-    {
         isMouseLeftPress = false;
         turnSpeed = 10f;
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+    }
 
+    void Start()
+    {
         ChangeState(playerIdle);
     }
 
@@ -71,7 +82,6 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         CarmeraStandard();
-        
         playerState.FixedUpdate(this);
     }
 
@@ -107,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
     public void LookRotation()
     {
-        moveDirection = (camForward * moveDir.z + camRight * moveDir.x).normalized;
+        moveDirection  = (camForward * moveDir.z + camRight * moveDir.x).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
     }
@@ -129,6 +139,14 @@ public class PlayerController : MonoBehaviour
     }
     public void OnAttack(InputValue val)
     {
+        if (val.isPressed == true)
+        {
+            isAttacking = true;
+        }
+        else
+        {
+            isAttacking = false;
+        }
     }
     public void AttackAnimationOn()
     {
@@ -143,25 +161,31 @@ public class PlayerController : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
+            yield return new WaitUntil(() => attackRange.proximateMonster != null);
             StartCoroutine(ArrowCreate());
         }
     }
     public IEnumerator ArrowCreate()
     {
-        Vector3 arrowDir = (attackRange.proximateMonster.gameObject.transform.position - transform.position).normalized;
+        arrowDir = (attackRange.proximateMonster.gameObject.transform.position - transform.position).normalized;
         for (int i = 0; i < 3; i++)
         {
             var temp = arrowPool.OnActive();
-            temp.transform.position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
-            temp.transform.rotation = Quaternion.LookRotation(arrowDir);   
-            //Instantiate(arrowPrefab,
-            //new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z),
-            //Quaternion.LookRotation(arrowDir));
-            temp.GetComponent<Rigidbody>().AddForce(arrowDir*10, ForceMode.Impulse);
-            Debug.Log(arrowDir);
+            //Debug.Log(temp.name);
+            temp.GetComponent<ArrowController>().target = arrowDir;
+            temp.GetComponent<ArrowController>().startPoint = transform.position;
+            temp.GetComponent<ArrowController>().arrowPool = this.arrowPool;
+            temp.GetComponent<ArrowController>().ShotArrow();
             yield return new WaitForSeconds(0.2f);
         }
         
+    }
+    public void TakeDamage(int damage)
+    {
+        Debug.Log("데미지 받음 , " + currentHp + "-" + damage + "=" + (currentHp - damage));
+        currentHp -= damage;
+        hpEvent?.Invoke();
+
     }
 }

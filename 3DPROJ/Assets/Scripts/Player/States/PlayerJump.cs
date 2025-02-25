@@ -12,7 +12,7 @@ public class PlayerJump : PlayerState
         JumpRay(player);
         if (jumpPossible == true && isJump == false)
         {
-            player.rb.AddForce(Vector3.up * 5, ForceMode.Impulse);
+            player.rb.AddForce(new Vector3(player.rb.velocity.x, 5,player.rb.velocity.z), ForceMode.Impulse);
             player.animator.SetTrigger("Jump");
             isJump = true;
             player.StartCoroutine(JumpCoolDown(player));

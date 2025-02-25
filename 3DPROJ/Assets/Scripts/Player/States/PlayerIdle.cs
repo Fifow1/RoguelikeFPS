@@ -37,27 +37,36 @@ public class PlayerIdle : PlayerState
         {
             player.ChangeState(player.playerJump);
         }
-        if (Input.GetMouseButtonDown(0))
+        if (player.isAttacking == true && player.attackRange.proximateMonster != null)
         {
-            if (player.attackRange.inRangeMonsterList.Length > 0)
-            {
-                player.attackCoroution = player.StartCoroutine(player.Shot());
-                player.AttackAnimationOn();
-            }
+            player.ChangeState(player.playerAttackIdle);
         }
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (player.attackCoroution != null)
-            {
-                player.StopCoroutine(player.attackCoroution);
-            }
-            //player.StopCoroutine(player.ArrowCreate());
-
-            //player.StopCoroutine(player.testCOr1);
-            //player.StopCoroutine(player.testCOr2);
-            player.AttackAnimationFalse();
-
-        }
+        #region
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    if (player.attackRange.inRangeMonsterList.Length > 0)
+        //    {
+        //        player.transform.localRotation = Quaternion.LookRotation(player.camForward);
+        //        player.isAttacking = true;
+        //        player.attackCoroution = player.StartCoroutine(player.Shot());
+        //        player.AttackAnimationOn();
+        //    }
+        //}
+        //if (Input.GetMouseButtonUp(0))
+        //{
+        //    if (player.attackCoroution != null)
+        //    {
+        //        player.isAttacking = false;
+        //        player.StopCoroutine(player.attackCoroution);
+        //    }
+        //    //player.StopCoroutine(player.ArrowCreate());
+        //
+        //    //player.StopCoroutine(player.testCOr1);
+        //    //player.StopCoroutine(player.testCOr2);
+        //    player.AttackAnimationFalse();
+        //
+        //}
+        #endregion
     }
 
 }

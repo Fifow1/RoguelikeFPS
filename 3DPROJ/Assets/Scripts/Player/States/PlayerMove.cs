@@ -1,17 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerMove : PlayerState
 {
     float walkSpeed = 3f;
     float runSpeed = 1f;
     float testNum = 0;
+    
     public override void Enter(PlayerController player)
     {
-        Debug.Log("MoveState");
+
+        //Debug.Log("MoveState");
     }
     public override void FixedUpdate(PlayerController player)
     {
@@ -41,24 +41,33 @@ public class PlayerMove : PlayerState
             runSpeed = 1f;
             testNum = SmoothAnimation(player, testNum, 0.5f);
         }
-        if (Input.GetMouseButtonDown(0))
+        if (player.isAttacking == true && player.attackRange.proximateMonster != null)
         {
-            if (player.attackRange.inRangeMonsterList.Length > 0)
-            {
-                player.attackCoroution = player.StartCoroutine(player.Shot());
-                player.AttackAnimationOn();
-            }
+            player.ChangeState(player.playerAttackMove);
         }
-        if (Input.GetMouseButtonUp(0))
-        {
-            if (player.attackCoroution != null)
-            {
-                player.StopCoroutine(player.attackCoroution);
-            }
-            player.AttackAnimationFalse();
-
-        }
-
+        #region
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    if (player.attackRange.inRangeMonsterList.Length > 0)
+        //    {
+        //        player.transform.localRotation = Quaternion.LookRotation(player.camForward);
+        //        player.isAttacking = true;
+        //        player.attackCoroution = player.StartCoroutine(player.Shot());
+        //        player.AttackAnimationOn();
+        //    }
+        //}
+        //if (Input.GetMouseButtonUp(0))
+        //{
+        //    if (player.attackCoroution != null)
+        //    {
+        //        player.isAttacking = false;
+        //        player.StopCoroutine(player.attackCoroution);
+        //    }
+        //    player.AttackAnimationFalse();
+        //
+        //}
+        //
+        #endregion
     }
     public void PlayerMovement(PlayerController player)
     {

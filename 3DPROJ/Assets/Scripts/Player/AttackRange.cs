@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class AttackRange : MonoBehaviour
 {
+    public AimTargetCanvus aimTargetCanvus;
     public Image aim;
     public Coroutine AttackRangeCheckCoroutine { get; set; }
     public Coroutine AroundMonsterCheckCoroutine { get; set; }
@@ -21,6 +22,7 @@ public class AttackRange : MonoBehaviour
     private void Start()
     {
         maxRange = 1000000;
+        //aimTargetCanvus = new AimTargetCanvus();    
         StartCoroutine(AttackRangeCheck());
     }
     IEnumerator AttackRangeCheck()
@@ -55,7 +57,7 @@ public class AttackRange : MonoBehaviour
         }
         if (proximateMonster != null)
         {
-            AimmingUi(proximateMonster.transform.position);
+            AimmingUi(proximateMonster.gameObject.transform.position);
         }
         yield return new WaitForSeconds(0.1f);
     }
@@ -64,7 +66,16 @@ public class AttackRange : MonoBehaviour
     {
         aim.enabled = true;
         var temp = Camera.main.WorldToScreenPoint(target);
-        aim.transform.position = new Vector3(temp.x, temp.y+120, temp.z);
+        // name
+        if (proximateMonster.gameObject.tag == "Oak")
+        {
+            aim.transform.position = new Vector3(temp.x, temp.y+150, temp.z);
+
+        }
+        else
+        {
+            aim.transform.position = new Vector3(temp.x, temp.y+80, temp.z);
+        }
     }
     #region 첫번째 시도
     //IEnumerator AroundMonsterCheck()
