@@ -15,7 +15,6 @@ public class PlayerIdle : PlayerState
 {
     public override void Enter(PlayerController player)
     {
-        Debug.Log("IdleState");
         player.animator.SetFloat("Speed", 0f);
         player.transform.localRotation = Quaternion.LookRotation(player.camForward);
     }

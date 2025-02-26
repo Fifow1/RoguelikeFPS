@@ -20,8 +20,6 @@ public class PlayerMoveaa : MonoBehaviour
     Vector3 moveDir;
     public float turnSpeed;
     float walkSpeed;
-    bool isWalking;
-    bool isRunning;
     float runSpeed;
     bool jumpPossible;
     public LayerMask groundLayer;
@@ -38,8 +36,6 @@ public class PlayerMoveaa : MonoBehaviour
 
     void Start()
     {
-        isWalking = false;
-        isRunning = false;
         turnSpeed = 150f;
         runSpeed = 1f;
         walkSpeed = 4f;

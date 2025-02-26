@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Monster
   - Oak
+  - Ground
   layers:
   - Default
   - TransparentFX

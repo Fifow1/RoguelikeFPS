@@ -24,8 +24,6 @@ public class PlayerMovement : MonoBehaviour
     public float turnSpeed;
 
     float walkSpeed;
-    bool isWalking;
-    bool isRunning;
     float runSpeed;
 
     bool jumpPossible;
@@ -41,8 +39,6 @@ public class PlayerMovement : MonoBehaviour
     {
         jumpCoolTime = 2f;
         isJump = false;
-        isWalking = false;
-        isRunning = false;
         turnSpeed = 10f;
         runSpeed = 1f;
         walkSpeed = 4f;

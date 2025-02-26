@@ -1,44 +1,45 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class OakController : MonoBehaviour
+public class OakController : Monster
 {
+    public Queue<Coroutine> queue;
+    public GameObject hpUi;
     public Transform player; // 플레이어 위치
     Animator animator;
     private NavMeshAgent agent;
-    bool isDie;
-    bool isAttacking;
-    float attackColldown;
-    int hp;
     int str;
-    float distance;
     public float attackDist;
     State currentState;
-    AnimatorStateInfo stateInfo;
 
-    void Start()
+    private void Awake()
     {
-
-        attackColldown = 2f;
-        isAttacking = false;
-        str = 20;
-        attackDist = 5;
-        hp = 10;
+        SetValue(5,5,false,0);
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        hpUiActive = false;
+        str = 20;
+        attackDist = 5;
         agent.updatePosition = false;
         agent.updateRotation = false;
-        StartCoroutine(PlayerFind());
-        StartCoroutine(StateAnimator());
     }
-
-    IEnumerator PlayerFind()
+    private void OnEnable()
+    {
+        //queue = new Queue<Coroutine>();
+        maxHp = 100;
+        currentHp = maxHp;
+    }
+    public IEnumerator PlayerFind()
     {
         while (isDie == false)
         {
+        Debug.Log("!!!!!!!!!!");
             distance = Vector3.Distance(player.position, transform.position);
             if (distance < attackDist)
             {
@@ -49,19 +50,29 @@ public class OakController : MonoBehaviour
                 agent.SetDestination(player.position);
                 currentState = State.move;
             }
-            if (hp <= 0)
+            if (currentHp <= 0)
             {
                 currentState = State.die;
                 isDie = true;
             }
             yield return new WaitForSeconds(0.1f);
         }
+        OnDie();
+    }
+    public override void OnDie()
+    {
+        animator.SetTrigger("IsDiee");
+        foreach (Coroutine i in queue)
+        {
+            StopCoroutine(i);
+        }
     }
 
-    IEnumerator StateAnimator()
+    public IEnumerator StateAnimator()
     {
         while (isDie == false)
         {
+        Debug.Log("!!!!!!!!!!");
             switch (currentState)
             {
                 case State.attack:
@@ -71,22 +82,19 @@ public class OakController : MonoBehaviour
                     transform.rotation = Quaternion.LookRotation(player.transform.position - transform.position);
                     animator.SetBool("IsAttack",false);
                     break;
-                case State.die:
-                    animator.SetBool("IsDie",true);
-                    break;
             }
             yield return new WaitForSeconds(0.5f);    
         }
     }
-    
-    void OnAttack()
+
+    public override void OnAttack()
     {
         Collider[] temp = Physics.OverlapSphere(transform.position, 5);
         for (int i = 0; i < temp.Length; i++)
         {
             if (temp[i].gameObject.tag == "Player")
             {
-                player.gameObject.GetComponent<PlayerController>().TakeDamage(str);
+                player.gameObject.GetComponent<PlayerController>().DecreaseHp(str);
             }
 
         }
@@ -97,4 +105,5 @@ public class OakController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, 5);
     }
+
 }

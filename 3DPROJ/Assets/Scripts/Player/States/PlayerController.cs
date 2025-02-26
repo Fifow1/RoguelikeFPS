@@ -10,8 +10,9 @@ public class PlayerController : MonoBehaviour
 {
     public float maxHp { get; private set; }
     public float currentHp { get; private set; }
+    public int gold { get; private set; }
     public Action hpEvent;
-    public ArrowObjPool arrowPool;
+    public ObjPool arrowPool;
     //public GameObject aimInfo;
     public LinkedList<GameObject> attackRangeMonsterList = new LinkedList<GameObject>();
     public Coroutine attackCoroution;
@@ -55,6 +56,9 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
+
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
         maxHp = 100;
         currentHp = maxHp;
         isAttacking = false;
@@ -171,7 +175,7 @@ public class PlayerController : MonoBehaviour
         arrowDir = (attackRange.proximateMonster.gameObject.transform.position - transform.position).normalized;
         for (int i = 0; i < 3; i++)
         {
-            var temp = arrowPool.OnActive();
+            var temp = arrowPool.OnActive("arrow", arrowPrefab);
             //Debug.Log(temp.name);
             temp.GetComponent<ArrowController>().target = arrowDir;
             temp.GetComponent<ArrowController>().startPoint = transform.position;
@@ -181,11 +185,15 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-    public void TakeDamage(int damage)
+    public void DecreaseHp(int damage)
     {
         Debug.Log("데미지 받음 , " + currentHp + "-" + damage + "=" + (currentHp - damage));
         currentHp -= damage;
         hpEvent?.Invoke();
 
+    }
+    public void AddGold(int gold)
+    {
+        this.gold += gold;
     }
 }

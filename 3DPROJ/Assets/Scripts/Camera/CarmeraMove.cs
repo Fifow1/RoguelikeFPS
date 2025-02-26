@@ -9,7 +9,6 @@ public class CarmeraMove : MonoBehaviour
     public float angle;
     public float height;
     Vector3 tmepVec;
-    float test;
     public GameObject ttt;
 
 
@@ -27,7 +26,6 @@ public class CarmeraMove : MonoBehaviour
         distance = 9;
         angle = 7;
         height = 3;
-        test = 3;
         mY = 0;
     }
     void Update()

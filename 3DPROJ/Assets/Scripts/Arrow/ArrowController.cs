@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ArrowController : MonoBehaviour
 {
-    public ArrowObjPool arrowPool;
+    public ObjPool arrowPool;
     public Vector3 startPoint;
     public Vector3 target;
     Rigidbody rb;
@@ -15,7 +15,10 @@ public class ArrowController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-    
+    private void Start()
+    {
+        StartCoroutine(DeActiveCor());
+    }
 
     public void ShotArrow()
     {
@@ -23,15 +26,21 @@ public class ArrowController : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(target);
         rb.AddForce(target * 100, ForceMode.Impulse);
     }
-    private void OnDisable()
-    {
-    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag =="Monster")
         {
-            arrowPool.DeActive(gameObject);
+            arrowPool.DeActive("arrow",gameObject);
+            other.GetComponent<Monster>().DecreaseHp(10);
+        }
+    }
+    IEnumerator DeActiveCor()
+    {
+        yield return new WaitForSeconds(2f);
+        if (gameObject.activeInHierarchy == true)
+        {
+            arrowPool.DeActive("arrow", gameObject);
         }
     }
 }
