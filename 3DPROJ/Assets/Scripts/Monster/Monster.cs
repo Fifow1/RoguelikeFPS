@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,6 +8,7 @@ public abstract class Monster : MonoBehaviour
 {
     public bool hpUiActive;
     public Action<float, float> eventHp;
+    public int compensation;
     protected string name { get; set; }
     protected int maxHp { get; set; }
     protected int currentHp { get; set; }
@@ -26,6 +25,10 @@ public abstract class Monster : MonoBehaviour
     public abstract void OnAttack();
     public virtual void DecreaseHp(int damage)
     {
+        if (isDie == false)
+        {
+            StartCoroutine(transform.GetComponentInChildren<MonsterHitShader>().HitMotion());
+        }
         if (currentHp > 0)
         {
             currentHp -= damage;

@@ -13,7 +13,7 @@ public class EyesBullet : MonoBehaviour
         }
         if (other.gameObject.tag == "Ground")
         {
-
+            ObjPool.instance.DeActive("eyesBullet", gameObject);
         }
     }
 }

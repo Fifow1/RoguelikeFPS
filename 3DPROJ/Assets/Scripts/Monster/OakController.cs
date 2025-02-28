@@ -13,13 +13,16 @@ public class OakController : Monster
     public GameObject hpUi;
     public Transform player; // 플레이어 위치
     Animator animator;
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
+    public bool isAttacking;
+    public bool isDieAnimationResult;
     int str;
     public float attackDist;
     State currentState;
 
     private void Awake()
     {
+        compensation = 5;
         SetValue(5,5,false,0);
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
@@ -31,7 +34,9 @@ public class OakController : Monster
     }
     private void OnEnable()
     {
+        isDie = false;
         //queue = new Queue<Coroutine>();
+        isDieAnimationResult = false;
         maxHp = 100;
         currentHp = maxHp;
     }
@@ -39,7 +44,6 @@ public class OakController : Monster
     {
         while (isDie == false)
         {
-        Debug.Log("!!!!!!!!!!");
             distance = Vector3.Distance(player.position, transform.position);
             if (distance < attackDist)
             {
@@ -47,32 +51,38 @@ public class OakController : Monster
             }
             else
             {
-                agent.SetDestination(player.position);
-                currentState = State.move;
+                if (isAttacking ==false)
+                {
+                    agent.SetDestination(player.position);
+                    currentState = State.move;
+                }
             }
             if (currentHp <= 0)
             {
                 currentState = State.die;
                 isDie = true;
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.3f);
         }
+        animator.SetTrigger("IsDiee");
+        yield return new WaitUntil(() => isDieAnimationResult == true);
         OnDie();
     }
     public override void OnDie()
     {
-        animator.SetTrigger("IsDiee");
-        foreach (Coroutine i in queue)
-        {
-            StopCoroutine(i);
-        }
+        StopAllCoroutines();
+        player.GetComponent<PlayerController>().increaseGold(compensation);
+        ObjPool.instance.DeActive("oak",gameObject);
+    }
+    public void DieAnimation()
+    {
+        isDieAnimationResult = true;
     }
 
     public IEnumerator StateAnimator()
     {
         while (isDie == false)
         {
-        Debug.Log("!!!!!!!!!!");
             switch (currentState)
             {
                 case State.attack:
@@ -99,6 +109,14 @@ public class OakController : Monster
 
         }
 
+    }
+    public void OnIsAttacking()
+    {
+        isAttacking = true;
+    }
+    public void OffIsAttacking()
+    {
+        isAttacking = false;
     }
     private void OnDrawGizmos()
     {

@@ -1435,6 +1435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5681162232442506251}
   - component: {fileID: 7120170368971334634}
+  - component: {fileID: 2556518708945651224}
   m_Layer: 7
   m_Name: BeholderMesh
   m_TagString: Untagged
@@ -1556,6 +1557,18 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.33862704, y: 0.14310592, z: 0.063367486}
     m_Extent: {x: 0.84097546, y: 0.95306545, z: 0.97063196}
   m_DirtyAABB: 0
+--- !u!114 &2556518708945651224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8438616389788579207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37a689547bd3ee044bdd36f17b52c96e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8527136288791335787
 GameObject:
   m_ObjectHideFlags: 0

@@ -50,7 +50,7 @@ public class AttackRange : MonoBehaviour
             var tempMonPos = Camera.main.WorldToScreenPoint(inRangeMonsterList[i].gameObject.transform.position);
             distance = Vector3.Distance(tempPlayerPos, tempMonPos);
             if (distance < tempDistance)
-            {//
+            {
                 tempDistance = distance;
                 proximateMonster = inRangeMonsterList[i];
             }
@@ -66,10 +66,9 @@ public class AttackRange : MonoBehaviour
     {
         aim.enabled = true;
         var temp = Camera.main.WorldToScreenPoint(target);
-        // name
         if (proximateMonster.gameObject.tag == "Oak")
         {
-            aim.transform.position = new Vector3(temp.x, temp.y+150, temp.z);
+            aim.transform.position = new Vector3(temp.x, temp.y+1000, temp.z);
 
         }
         else

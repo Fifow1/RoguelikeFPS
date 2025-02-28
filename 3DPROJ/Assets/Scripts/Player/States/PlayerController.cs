@@ -10,8 +10,9 @@ public class PlayerController : MonoBehaviour
 {
     public float maxHp { get; private set; }
     public float currentHp { get; private set; }
-    public int gold { get; private set; }
+    public int gold { get; set; }
     public Action hpEvent;
+    public Action<int> goldEvent;
     public ObjPool arrowPool;
     //public GameObject aimInfo;
     public LinkedList<GameObject> attackRangeMonsterList = new LinkedList<GameObject>();
@@ -22,25 +23,16 @@ public class PlayerController : MonoBehaviour
     public Vector3 moveDir;
     public float turnSpeed { get; private set; }
 
-    // public float walkSpeed { get; private set; }
-    // public bool isWalking { get; set; }
-    // public bool isRunning { get; set; }
-    // public float runSpeed { get; set; }
-
     public float speedParameter;
     public bool isMouseLeftPress;
     public bool isAttacking;
 
     public LayerMask groundLayer; 
-    Vector3 arrowDir;
+    GameObject arrowTarget;
     public Vector3 camForward;
     public Vector3 camRight;
     public Vector3 moveDirection;
     public Vector2 currentInput;
-    //걷기
-    //점프
-    //달리기
-    //PlayerState playerState;
     public AttackRange attackRange;
     public PlayerState playerState { get; private set; }
     public PlayerIdle playerIdle { get; private set; }
@@ -60,6 +52,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
         maxHp = 100;
+        gold = 0;
         currentHp = maxHp;
         isAttacking = false;
         playerIdle = new PlayerIdle();
@@ -80,6 +73,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UiManager.instance.PauseMenu();
+        }
         playerState.Update(this);
     }
 
@@ -88,36 +85,6 @@ public class PlayerController : MonoBehaviour
         CarmeraStandard();
         playerState.FixedUpdate(this);
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Monster")
-        {
-            attackRangeMonsterList.AddLast(other.gameObject);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Monster")
-        {
-            attackRangeMonsterList.Remove(other.gameObject);
-        }
-    }
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.tag == "Monster")
-        {
-            attackRangeMonsterList.Remove(other.gameObject);
-        }
-    }
-
-    public void MonsterDetection()
-    {
-
-    }
-
-
 
     public void LookRotation()
     {
@@ -172,28 +139,23 @@ public class PlayerController : MonoBehaviour
     }
     public IEnumerator ArrowCreate()
     {
-        arrowDir = (attackRange.proximateMonster.gameObject.transform.position - transform.position).normalized;
-        for (int i = 0; i < 3; i++)
+        arrowTarget = attackRange.proximateMonster.gameObject;
+        for (int i = 0; i < 10; i++)
         {
             var temp = arrowPool.OnActive("arrow", arrowPrefab);
-            //Debug.Log(temp.name);
-            temp.GetComponent<ArrowController>().target = arrowDir;
-            temp.GetComponent<ArrowController>().startPoint = transform.position;
-            temp.GetComponent<ArrowController>().arrowPool = this.arrowPool;
-            temp.GetComponent<ArrowController>().ShotArrow();
+            temp.transform.position = transform.position;
+            temp.GetComponent<ArrowController>().target = arrowTarget;
             yield return new WaitForSeconds(0.2f);
         }
-        
     }
     public void DecreaseHp(int damage)
     {
-        Debug.Log("데미지 받음 , " + currentHp + "-" + damage + "=" + (currentHp - damage));
         currentHp -= damage;
         hpEvent?.Invoke();
-
     }
-    public void AddGold(int gold)
+    public void increaseGold(int gold)
     {
         this.gold += gold;
+        goldEvent?.Invoke(gold);
     }
 }

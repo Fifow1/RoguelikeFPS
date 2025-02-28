@@ -11,9 +11,10 @@ enum State
 public class EyesController : Monster
 {
     public Transform player; // ÇÃ·¹ÀÌ¾î À§Ä¡
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
     Animator animator;
     public float attackDist;
+    bool isDieAnimationResult;
     State currentState;
     private void Awake()
     {
@@ -22,6 +23,14 @@ public class EyesController : Monster
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         
+    }
+    private void OnEnable()
+    {
+        isDie = false;
+        isDieAnimationResult = false;
+        compensation = 2;
+        maxHp = 100;
+        currentHp = maxHp;
     }
 
     public IEnumerator PlayerFind()
@@ -65,12 +74,18 @@ public class EyesController : Monster
             }
             yield return new WaitForSeconds(0.1f);
         }
+        animator.SetTrigger("IsDie");
+        yield return new WaitUntil(() => isDieAnimationResult == true);
+    }
+    public void DieAnimation()
+    {
+        isDieAnimationResult = true;
     }
     public override void OnDie()
     {
-        Debug.Log("Á×À½Á×À½");
-        animator.SetTrigger("IsDie");
+        player.GetComponent<PlayerController>().increaseGold(compensation);
         StopAllCoroutines();
+        ObjPool.instance.DeActive("eyes",gameObject);
     }
     public override void OnAttack()
     {

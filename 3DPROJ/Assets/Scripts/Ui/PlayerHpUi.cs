@@ -20,7 +20,6 @@ public class PlayerHpUi : MonoBehaviour
     }
     public void UpdateHp()
     {
-        Debug.Log(" rr : " + image.fillAmount);
         image.fillAmount = playerCNTL.currentHp / playerCNTL.maxHp;
     }
 }

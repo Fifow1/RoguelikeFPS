@@ -10,6 +10,7 @@ public class ObjPool : MonoBehaviour
     public static ObjPool instance;
     GameObject temp;
     public Transform canvas;
+    public Transform worldCanvas;
     public GameObject[] prefab;
     Dictionary<string, List<GameObject>> pool;
     private void Awake()
@@ -19,11 +20,12 @@ public class ObjPool : MonoBehaviour
             instance = this;
         }
         pool = new Dictionary<string, List<GameObject>>();
-        CreatPool("arrow", prefab[0],20);
+        CreatPool("arrow", prefab[0],40);
         CreatPool("oak", prefab[2],20);
         CreatPool("eyes", prefab[3],20);
         CreatPool("eyesBullet", prefab[4],30);
         CreatPool("monsterHpUi", prefab[1],5);
+        CreatPool("chestPrice", prefab[5],5);
     }
 
     public void CreatPool(string key , GameObject prefabs , int count)
@@ -34,6 +36,10 @@ public class ObjPool : MonoBehaviour
             if (key == "monsterHpUi")
             {
                 temp = Instantiate(prefabs, canvas);
+            }
+            else if (key == "chestPrice")
+            {
+                temp = Instantiate(prefabs, worldCanvas);
             }
             else
             {
