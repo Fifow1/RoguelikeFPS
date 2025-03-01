@@ -13,19 +13,22 @@ interface IRotation
 public class ChestController : MonoBehaviour
 {
     int price;
-    
+    public Items items;
+    //public Game itemFac;
     public InteractImage interImage;
     public GameObject priceText;
     public GameObject player { get; set; }
-    private void Awake()
+    public PlayerController playerController { get; set; }
+    private void Start()
     {
-        player.GetComponent<PlayerController>();
+        playerController = player.GetComponent<PlayerController>();
+        price = 12;
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            price = 12;
+            Debug.Log("æ∆¿Ã≈€ : " + items);
             interImage.ChangePos(transform);
             interImage.EnableImage();
             priceText = UiManager.instance.OnActiveChestPrice();
@@ -46,16 +49,24 @@ public class ChestController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E)) 
         {
-            if(){
-
+            if (playerController.gold < price) 
+            {
+                return;
             }
-            StartCoroutine(transform.GetComponentInChildren<ChestOpen>().OpenCover());
+            else
+            {
+                playerController.DecreaseGold(price);
+                StartCoroutine(transform.GetComponentInChildren<ChestOpen>().OpenCover());
+            }
         }
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W)||
             Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
         {
             interImage.Rotaion(player.transform);
-            priceText.GetComponent<PriceText>().Rotaion(player.transform);
+            if (priceText != null)
+            {
+                priceText.GetComponent<PriceText>().Rotaion(player.transform);
+            }
         }
     }
 }

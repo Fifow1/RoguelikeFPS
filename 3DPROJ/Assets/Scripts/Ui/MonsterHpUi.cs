@@ -31,6 +31,7 @@ public class MonsterHpUi : MonoBehaviour
     {
         if (target == null)
         {
+            return;
         }
         else
         {

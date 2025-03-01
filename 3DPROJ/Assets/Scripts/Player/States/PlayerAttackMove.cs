@@ -16,6 +16,10 @@ public class PlayerAttackMove : PlayerState
 
     public override void FixedUpdate(PlayerController player)
     {
+        if (player.currentHp <= 0)
+        {
+            player.ChangeState(player.playerDie);
+        }
         AttackingMovemet(player);
         player.animator.SetFloat("X",player.moveDir.x);
         player.animator.SetFloat("Y", player.moveDir.z);

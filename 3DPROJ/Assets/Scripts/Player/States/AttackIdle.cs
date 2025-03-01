@@ -17,7 +17,10 @@ public class AttackIdle : PlayerState
 
     public override void FixedUpdate(PlayerController player)
     {
-        //Debug.Log(player.attackRange.proximateMonster.name);
+        if (player.currentHp <= 0)
+        {
+            player.ChangeState(player.playerDie);
+        }
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
         {
             if (player.moveDir != Vector3.zero)

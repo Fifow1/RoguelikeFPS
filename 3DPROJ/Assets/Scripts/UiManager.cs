@@ -13,6 +13,7 @@ public class UiManager : MonoBehaviour
     public GameObject inventory;
     public GameObject chestPrice;
     public GameObject interactionImage;
+    public GameObject GameOverUi;
 
     private void Awake()
     {
@@ -25,30 +26,31 @@ public class UiManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    //public GameObject PrintInteractionTextOn()
-    //{
-    //    Debug.Log("22");
-    //    interactionImage.SetActive(true);
-    //    return interactionImage;
-    //}
-    //public GameObject PrintInteractionTextOff()
-    //{
-    //    interactionImage.SetActive(false);
-    //    return interactionImage;
-    //}
+    public void OnGameOverUi()
+    {
+        GameOverUi.SetActive(true);
+    }
+    public void OffGameOverUi()
+    {
+        GameOverUi.SetActive(false);
+    }
     public void PauseMenu()
     {
         if (isPauseMenu == true)
-        {
+        { // 두번째 esc 눌렀을때
+            Cursor.visible = false;
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
             isPauseMenu = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
-        else
+        else // 처음 esc 눌렀을때
         {
+            Cursor.visible = true;
             pauseMenu.SetActive(true);
             Time.timeScale = 0f;
             isPauseMenu = true;
+            Cursor.lockState = CursorLockMode.None;
         }
     }
     public GameObject OnActiveChestPrice()

@@ -21,6 +21,10 @@ public class PlayerMove : PlayerState
 
     public override void Update(PlayerController player)
     {
+        if (player.currentHp <= 0)
+        {
+            player.ChangeState(player.playerDie);
+        }
         if (player.moveDir == Vector3.zero)
         {
             player.ChangeState(player.playerIdle);

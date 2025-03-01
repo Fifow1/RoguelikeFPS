@@ -1,33 +1,19 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class MonsterHitShader : MonoBehaviour
 {
+    Monster monster;
     Renderer render;
-    float currentTime;
-    float endTime;
-    float middleTime;
-    bool incerease;
-    bool decerease;
     public bool complate;
     private void Start()
     {
+        monster = transform.parent.GetComponent<Monster>();
         render = GetComponent<Renderer>();
-        currentTime = 0;
-        middleTime = endTime /2;
-        endTime = 2;
         complate = true;
     }
     public IEnumerator HitMotion()
     {
-        if (complate == false)
-        {
-            yield break;
-        }
-        complate = false;
         Color startColor = render.material.color;  // 원래 색상 저장
         Color hitColor = Color.red;                // 타격 시 빨간색
         float duration = 1f;                        // 빨갛게 변하는 시간
@@ -40,7 +26,6 @@ public class MonsterHitShader : MonoBehaviour
             render.material.color = Color.Lerp(startColor, hitColor, t);
             yield return null;
         }
-
         elapsedTime = 0f;
         while (elapsedTime < duration)
         {
@@ -49,7 +34,11 @@ public class MonsterHitShader : MonoBehaviour
             render.material.color = Color.Lerp(hitColor, startColor, t);
             yield return null;
         }
-        complate = true;
+        if (monster.isDie == true)
+        {
+            render.material.color = startColor;
+        }
+        monster.hitMotionCor = null;
     }
 
     public IEnumerator HitMotionCooldown()

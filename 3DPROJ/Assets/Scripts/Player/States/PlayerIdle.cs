@@ -25,6 +25,10 @@ public class PlayerIdle : PlayerState
 
     public override void Update(PlayerController player)
     {
+        if (player.currentHp <= 0)
+        {
+            player.ChangeState(player.playerDie);
+        }
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
         {
             if (player.moveDir != Vector3.zero)

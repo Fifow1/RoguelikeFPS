@@ -1,20 +1,19 @@
 using System;
 using UnityEngine;
-using UnityEngine.AI;
 
 
 
 public abstract class Monster : MonoBehaviour
 {
     public bool hpUiActive;
+    public Coroutine hitMotionCor;
     public Action<float, float> eventHp;
     public int compensation;
     protected string name { get; set; }
     protected int maxHp { get; set; }
     protected int currentHp { get; set; }
-    protected bool isDie { get; set; }
+    public bool isDie { get; set; }
     protected float distance { get; set; }
-   // public abstract State currentState { get; set; }
     protected void SetValue(int maxHp, int currentHp, bool isDie, float distance)
     {
         this.maxHp = maxHp;
@@ -27,7 +26,10 @@ public abstract class Monster : MonoBehaviour
     {
         if (isDie == false)
         {
-            StartCoroutine(transform.GetComponentInChildren<MonsterHitShader>().HitMotion());
+            if (hitMotionCor == null)
+            {
+                hitMotionCor = StartCoroutine(transform.GetComponentInChildren<MonsterHitShader>().HitMotion());
+            }
         }
         if (currentHp > 0)
         {

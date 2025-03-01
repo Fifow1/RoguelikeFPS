@@ -71,7 +71,7 @@ public class OakController : Monster
     public override void OnDie()
     {
         StopAllCoroutines();
-        player.GetComponent<PlayerController>().increaseGold(compensation);
+        player.GetComponent<PlayerController>().IncreaseGold(compensation);
         ObjPool.instance.DeActive("oak",gameObject);
     }
     public void DieAnimation()

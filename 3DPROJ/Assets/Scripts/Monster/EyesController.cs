@@ -56,6 +56,9 @@ public class EyesController : Monster
             }
             yield return new WaitForSeconds(0.1f);
         }
+        animator.SetTrigger("IsDie");
+        // 죽을 때 코루틴 꺼주어야 함
+        yield return new WaitUntil(() => isDieAnimationResult == true );
         OnDie();
     }
 
@@ -74,8 +77,6 @@ public class EyesController : Monster
             }
             yield return new WaitForSeconds(0.1f);
         }
-        animator.SetTrigger("IsDie");
-        yield return new WaitUntil(() => isDieAnimationResult == true);
     }
     public void DieAnimation()
     {
@@ -83,7 +84,8 @@ public class EyesController : Monster
     }
     public override void OnDie()
     {
-        player.GetComponent<PlayerController>().increaseGold(compensation);
+        player.GetComponent<PlayerController>().IncreaseGold(compensation);
+
         StopAllCoroutines();
         ObjPool.instance.DeActive("eyes",gameObject);
     }

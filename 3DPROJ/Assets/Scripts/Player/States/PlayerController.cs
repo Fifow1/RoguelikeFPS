@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public Coroutine attackCoroution;
     public GameObject arrowPrefab;
     public Rigidbody rb;
+    public CapsuleCollider cl;
     public Animator animator { get; set; }
     public Vector3 moveDir;
     public float turnSpeed { get; private set; }
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public float speedParameter;
     public bool isMouseLeftPress;
     public bool isAttacking;
+    public bool isDie;
 
     public LayerMask groundLayer; 
     GameObject arrowTarget;
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 currentInput;
     public AttackRange attackRange;
     public PlayerState playerState { get; private set; }
+    public PlayerDie playerDie { get; private set; }
     public PlayerIdle playerIdle { get; private set; }
     public PlayerMove playerMove { get; private set; }
     public PlayerJump playerJump { get; private set; }
@@ -49,19 +52,21 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
 
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.visible = false;
         maxHp = 100;
-        gold = 0;
         currentHp = maxHp;
+        gold = 0;
         isAttacking = false;
         playerIdle = new PlayerIdle();
+        playerDie = new PlayerDie();    
         playerAttackMove = new PlayerAttackMove();
         playerAttackIdle = new AttackIdle();
         playerMove = new PlayerMove();
         playerJump = new PlayerJump();
         isMouseLeftPress = false;
         turnSpeed = 10f;
+        cl = GetComponent<CapsuleCollider>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
     }
@@ -140,7 +145,7 @@ public class PlayerController : MonoBehaviour
     public IEnumerator ArrowCreate()
     {
         arrowTarget = attackRange.proximateMonster.gameObject;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 2; i++)
         {
             var temp = arrowPool.OnActive("arrow", arrowPrefab);
             temp.transform.position = transform.position;
@@ -153,9 +158,18 @@ public class PlayerController : MonoBehaviour
         currentHp -= damage;
         hpEvent?.Invoke();
     }
-    public void increaseGold(int gold)
+    public void ChangeGold()
+    {
+        goldEvent?.Invoke(gold);
+    }
+    public void IncreaseGold(int gold)
     {
         this.gold += gold;
-        goldEvent?.Invoke(gold);
+        ChangeGold();
+    }
+    public void DecreaseGold(int price)
+    {
+        gold -= price;
+        ChangeGold();
     }
 }
