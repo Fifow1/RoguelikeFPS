@@ -57,10 +57,10 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.46144533
+      - time: 0.37653968
         functionName: DieAnimationEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: cff2db5fca8903d438d508d32f0ced8b, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 0a536ffe086715d4396746672f045f11, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

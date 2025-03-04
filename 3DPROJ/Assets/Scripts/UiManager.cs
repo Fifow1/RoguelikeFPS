@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class UiManager : MonoBehaviour
@@ -28,6 +24,8 @@ public class UiManager : MonoBehaviour
     }
     public void OnGameOverUi()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         GameOverUi.SetActive(true);
     }
     public void OffGameOverUi()

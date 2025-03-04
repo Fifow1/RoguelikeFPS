@@ -1,9 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,12 +18,13 @@ public class OakController : Monster
 
     private void Awake()
     {
+        isDie = false;
         compensation = 5;
         SetValue(5,5,false,0);
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         hpUiActive = false;
-        str = 20;
+        str = 40;
         attackDist = 5;
         agent.updatePosition = false;
         agent.updateRotation = false;
@@ -35,7 +32,6 @@ public class OakController : Monster
     private void OnEnable()
     {
         isDie = false;
-        //queue = new Queue<Coroutine>();
         isDieAnimationResult = false;
         maxHp = 100;
         currentHp = maxHp;
@@ -55,6 +51,7 @@ public class OakController : Monster
                 {
                     agent.SetDestination(player.position);
                     currentState = State.move;
+                    animator.speed = 1.2f;
                 }
             }
             if (currentHp <= 0)
@@ -71,6 +68,7 @@ public class OakController : Monster
     public override void OnDie()
     {
         StopAllCoroutines();
+        transform.GetComponentInChildren<MonsterHitShader>().ResetColor();
         player.GetComponent<PlayerController>().IncreaseGold(compensation);
         ObjPool.instance.DeActive("oak",gameObject);
     }

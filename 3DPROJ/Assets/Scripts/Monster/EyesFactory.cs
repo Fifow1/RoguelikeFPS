@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class EyesFactory : BaseFactory
 {
+    int eyesCount;
     public GameObject eyes;
     public Transform target;
     public override void CreateMonster()
@@ -14,6 +15,5 @@ public class EyesFactory : BaseFactory
         temp.GetComponent<EyesController>().player = target;
         StartCoroutine(temp.GetComponent<EyesController>().PlayerFind());
         StartCoroutine(temp.GetComponent<EyesController>().StateAnimator());
-
     }
 }

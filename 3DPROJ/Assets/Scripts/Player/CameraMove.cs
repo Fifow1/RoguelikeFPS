@@ -6,13 +6,11 @@ using UnityEngine.TextCore.Text;
 public class CameraMove : MonoBehaviour
 {
     public Transform target;
-    float distance;
-    float maxDistance;
-    float minDistance;
     Vector3 offset;
     float mX;
     float mY;
-    Ray ray;
+    float minAngleY;
+    float maxYAngleY;
 
     void Start()
     {

@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// !!
-using UnityEngine.Pool;
 
 
 public class ObjPool : MonoBehaviour
@@ -20,11 +18,11 @@ public class ObjPool : MonoBehaviour
             instance = this;
         }
         pool = new Dictionary<string, List<GameObject>>();
-        CreatPool("arrow", prefab[0],40);
-        CreatPool("oak", prefab[2],20);
-        CreatPool("eyes", prefab[3],20);
-        CreatPool("eyesBullet", prefab[4],30);
-        CreatPool("monsterHpUi", prefab[1],5);
+        CreatPool("arrow", prefab[0],10);
+        CreatPool("oak", prefab[1],2);
+        CreatPool("eyes", prefab[2],2);
+        CreatPool("eyesBullet", prefab[4],100);
+        CreatPool("monsterHpUi", prefab[3],5);
         CreatPool("chestPrice", prefab[5],5);
     }
 
@@ -56,14 +54,15 @@ public class ObjPool : MonoBehaviour
         if (temp != null)
         {
             temp.SetActive(true);
+        return temp;
         }
         else
         {
             var temp2 = Instantiate(prefabs);
             temp2.SetActive(true);
-            pool[key].Add(temp);
+            pool[key].Add(temp2);
+        return temp2;
         }
-        return temp;
     }
     public void DeActive(string key, GameObject prefabs)
     {

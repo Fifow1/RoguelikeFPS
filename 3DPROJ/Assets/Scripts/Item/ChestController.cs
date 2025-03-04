@@ -12,21 +12,24 @@ interface IRotation
 }
 public class ChestController : MonoBehaviour
 {
+    bool isOpen;
     int price;
     public Items items;
     //public Game itemFac;
     public InteractImage interImage;
     public GameObject priceText;
+    public GameObject item;
     public GameObject player { get; set; }
     public PlayerController playerController { get; set; }
     private void Start()
     {
+        isOpen = false;
         playerController = player.GetComponent<PlayerController>();
         price = 12;
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && isOpen ==false)
         {
             Debug.Log("æ∆¿Ã≈€ : " + items);
             interImage.ChangePos(transform);
@@ -39,7 +42,7 @@ public class ChestController : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
 
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player"&& isOpen == false)
         {
             ObjPool.instance.DeActive("chestPrice", priceText);
             interImage.DisableImage();
@@ -47,25 +50,38 @@ public class ChestController : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if (Input.GetKeyDown(KeyCode.E)) 
+        if (isOpen == true)
         {
-            if (playerController.gold < price) 
-            {
-                return;
-            }
-            else
-            {
-                playerController.DecreaseGold(price);
-                StartCoroutine(transform.GetComponentInChildren<ChestOpen>().OpenCover());
-            }
+            return;
         }
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W)||
-            Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        else
         {
-            interImage.Rotaion(player.transform);
-            if (priceText != null)
+            if (Input.GetKeyDown(KeyCode.E)) 
             {
-                priceText.GetComponent<PriceText>().Rotaion(player.transform);
+                Debug.Log("eeeeeeeee");
+                if (playerController.gold < price) 
+                {
+                    isOpen = false;
+                    return;
+                }
+                else
+                {
+                    isOpen = true;
+                    ObjPool.instance.DeActive("chestPrice", priceText);
+                    interImage.DisableImage();
+                    playerController.DecreaseGold(price);
+                    StartCoroutine(transform.GetComponentInChildren<ChestOpen>().OpenCover());
+                    //Instantiate(item,transform.position,transform.rotation);
+                }
+            }
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W)||
+                Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+            {
+                interImage.Rotaion(player.transform);
+                if (priceText != null)
+                {
+                    priceText.GetComponent<PriceText>().Rotaion(player.transform);
+                }
             }
         }
     }

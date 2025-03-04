@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public Animator animator { get; set; }
     public Vector3 moveDir;
     public float turnSpeed { get; private set; }
+    public int arrowCount;
 
     public float speedParameter;
     public bool isMouseLeftPress;
@@ -51,9 +52,10 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
-
-        //Cursor.lockState = CursorLockMode.Confined;
-        //Cursor.visible = false;
+        Cursor.visible = false;
+        Time.timeScale = 1f;
+        UiManager.instance.isPauseMenu = false;
+        Cursor.lockState = CursorLockMode.Locked;
         maxHp = 100;
         currentHp = maxHp;
         gold = 0;
@@ -69,6 +71,7 @@ public class PlayerController : MonoBehaviour
         cl = GetComponent<CapsuleCollider>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        arrowCount = 2;
     }
 
     void Start()
@@ -106,6 +109,9 @@ public class PlayerController : MonoBehaviour
         camRight.y = 0;
         camForward.Normalize();
         camRight.Normalize();
+        int walkSpeed = 0;
+
+        rb.velocity = transform.TransformDirection(Vector3.forward * walkSpeed);
     }
 
     public void OnMove(InputValue val)
@@ -145,7 +151,7 @@ public class PlayerController : MonoBehaviour
     public IEnumerator ArrowCreate()
     {
         arrowTarget = attackRange.proximateMonster.gameObject;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < arrowCount; i++)
         {
             var temp = arrowPool.OnActive("arrow", arrowPrefab);
             temp.transform.position = transform.position;
@@ -157,6 +163,12 @@ public class PlayerController : MonoBehaviour
     {
         currentHp -= damage;
         hpEvent?.Invoke();
+    }
+    public void DieAnimationEvent()
+    {
+        cl.height = 0;
+        cl.center = new Vector3(0, 1, 0);
+        isDie = true;
     }
     public void ChangeGold()
     {

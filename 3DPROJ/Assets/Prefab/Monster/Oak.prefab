@@ -2206,7 +2206,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 6
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 50
@@ -2252,8 +2252,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpUiActive: 0
+  compensation: 0
   hpUi: {fileID: 0}
   player: {fileID: 0}
+  agent: {fileID: 0}
+  isAttacking: 0
+  isDieAnimationResult: 0
   attackDist: 0
 --- !u!114 &9122481934469530532
 MonoBehaviour:
@@ -2543,6 +2547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a689547bd3ee044bdd36f17b52c96e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  complate: 0
 --- !u!1 &6926599474114804622
 GameObject:
   m_ObjectHideFlags: 0

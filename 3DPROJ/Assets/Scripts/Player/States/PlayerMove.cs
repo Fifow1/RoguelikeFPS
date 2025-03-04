@@ -10,8 +10,6 @@ public class PlayerMove : PlayerState
     
     public override void Enter(PlayerController player)
     {
-
-        //Debug.Log("MoveState");
     }
     public override void FixedUpdate(PlayerController player)
     {
@@ -75,7 +73,7 @@ public class PlayerMove : PlayerState
     }
     public void PlayerMovement(PlayerController player)
     {
-        player.rb.velocity = player.transform.TransformDirection(new Vector3(0, player.rb.velocity.y, walkSpeed * runSpeed));
+        player.rb.velocity = player.transform.TransformDirection(Vector3.forward*3);
     }
     public float SmoothAnimation(PlayerController player, float speedParameterS, float speedParameterE)
     {

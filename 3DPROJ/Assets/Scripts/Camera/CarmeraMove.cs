@@ -9,18 +9,7 @@ public class CarmeraMove : MonoBehaviour
     public float angle;
     public float height;
     Vector3 tmepVec;
-    public GameObject ttt;
-
-
     float mY;
-    //private void Start()
-    //{
-    //    //tmepVec = transform.position - target.transform.position;
-    //}
-    //void Update()
-    //{
-    //    //transform.position = target.position + tmepVec;
-    //}
     private void Start()
     {
         distance = 9;

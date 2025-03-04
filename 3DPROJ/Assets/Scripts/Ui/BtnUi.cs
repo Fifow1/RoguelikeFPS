@@ -1,16 +1,16 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class BtnUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    Button firstButton;
     Image btnImage;
     Outline btnOutline;
-    private Text buttonText;  // ¹öÆ° ÀÌ¹ÌÁö
-    Color textBlack; // ±âº» »ö»ó (ºí·¢)
-    Color textWhite; // ¸¶¿ì½º ¿Ã·ÈÀ» ¶§ »ö»ó (Èò»ö)
+    private Text buttonText;  // ë²„íŠ¼ ì´ë¯¸ì§€
+    Color textBlack; // ê¸°ë³¸ ìƒ‰ìƒ (ë¸”ë™)
+    Color textWhite; // ë§ˆìš°ìŠ¤ ì˜¬ë ¸ì„ ë•Œ ìƒ‰ìƒ (í°ìƒ‰)
     Color imageGrean ;
     void Start()
     {
@@ -25,7 +25,6 @@ public class BtnUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (buttonText != null)
         {
-            //StartCoroutine(FadeImage(1));
             btnOutline.enabled = true;
             btnImage.color = imageGrean;
             buttonText.color = textWhite; 
@@ -41,5 +40,12 @@ public class BtnUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             buttonText.color = textBlack;
         }
     }
+    private void OnDisable()
+    {
+        btnOutline.enabled = false;
+        btnImage.color = textWhite;
+        buttonText.color = textBlack;
+    }
+
 
 }

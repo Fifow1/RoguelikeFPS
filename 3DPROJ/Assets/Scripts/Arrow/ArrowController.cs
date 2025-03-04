@@ -1,9 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class ArrowController : MonoBehaviour
 {
@@ -27,7 +23,7 @@ public class ArrowController : MonoBehaviour
         Vector3 temp = (ttemp - transform.position).normalized;
         distance = Vector3.Distance(target.transform.position, transform.position);
         transform.rotation = Quaternion.LookRotation(temp);
-        rb.velocity = temp * 5;
+        rb.velocity = temp * 9;
         if (distance < 2f)
         {
 

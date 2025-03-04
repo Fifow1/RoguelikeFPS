@@ -32,7 +32,7 @@ public class Factory : MonoBehaviour
             {
                 eyes.CreateMonster();
             }
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(5);
         }
     }
 }

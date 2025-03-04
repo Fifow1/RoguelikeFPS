@@ -143,7 +143,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de81f61ffbc54894f848d5e4c2724b69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  temp: {fileID: 0}
+  items: 0
+  interImage: {fileID: 0}
+  priceText: {fileID: 0}
+  item: {fileID: 0}
 --- !u!135 &7853067355175675890
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -163,7 +166,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 3
+  m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7898212221878341249
 GameObject:

@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Xml;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.AI;
 enum State
@@ -18,11 +15,13 @@ public class EyesController : Monster
     State currentState;
     private void Awake()
     {
+        isDie = false;
         SetValue(50,50,false,0);
         attackDist = 5;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        
+        hpUiActive = false;
+
     }
     private void OnEnable()
     {
@@ -57,7 +56,6 @@ public class EyesController : Monster
             yield return new WaitForSeconds(0.1f);
         }
         animator.SetTrigger("IsDie");
-        // 죽을 때 코루틴 꺼주어야 함
         yield return new WaitUntil(() => isDieAnimationResult == true );
         OnDie();
     }
@@ -84,16 +82,16 @@ public class EyesController : Monster
     }
     public override void OnDie()
     {
-        player.GetComponent<PlayerController>().IncreaseGold(compensation);
-
         StopAllCoroutines();
+        transform.GetComponentInChildren<MonsterHitShader>().ResetColor();
+        player.GetComponent<PlayerController>().IncreaseGold(compensation);
         ObjPool.instance.DeActive("eyes",gameObject);
     }
     public override void OnAttack()
     {
         var temp = ObjPool.instance.OnActive("eyesBullet",gameObject);
         temp.transform.position = transform.position;
-        Vector3 tempVec = (player.position - transform.position).normalized;
+        Vector3 tempVec = (player.position - temp.transform.position).normalized;
         temp.GetComponent<Rigidbody>().AddForce(tempVec * 10,ForceMode.Impulse);
 
     }

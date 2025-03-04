@@ -9,7 +9,6 @@ public abstract class Monster : MonoBehaviour
     public Coroutine hitMotionCor;
     public Action<float, float> eventHp;
     public int compensation;
-    protected string name { get; set; }
     protected int maxHp { get; set; }
     protected int currentHp { get; set; }
     public bool isDie { get; set; }

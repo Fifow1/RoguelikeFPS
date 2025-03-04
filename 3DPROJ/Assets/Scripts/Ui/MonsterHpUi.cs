@@ -10,18 +10,23 @@ public class MonsterHpUi : MonoBehaviour
     public Transform target;
     public Monster monster;
     public Image image;
-
     private void Awake()
     {
         image = GetComponent<Image>();
     }
-    private void OnEnable()
+    private void OnDisable()
     {
-        
+        if (monster.eventHp != null)
+        {
+            monster.eventHp -= MonsterHpUpdate;
+        }
     }
     public void SetEvent()
     {
-        monster.eventHp += MonsterHpUpdate;
+        if (monster.eventHp == null)
+        {
+            monster.eventHp += MonsterHpUpdate;
+        }
     }
     public void MonsterHpUpdate(float currentHp , float maxHp)
     {
